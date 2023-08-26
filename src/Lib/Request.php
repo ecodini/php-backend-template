@@ -1,4 +1,5 @@
 <?php namespace Holamanola45\Www\Lib;
+      use SimpleXMLElement;
 
 class Request
 {
@@ -42,5 +43,19 @@ class Request
         $decoded = json_decode($content);
 
         return $decoded;
+    }
+
+    public function getXML() {
+        if ($this->reqMethod !== 'POST') {
+            return [];
+        }
+
+        if (strcasecmp($this->contentType, 'application/xml') !== 0) {
+            return [];
+        }
+
+        $content = trim(file_get_contents("php://input"));
+
+        return new SimpleXMLElement(trim(file_get_contents("php://input")));
     }
 }
