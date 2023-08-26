@@ -1,8 +1,5 @@
 <?php namespace Holamanola45\Www\Lib;
 
-use Exception;
-use Holamanola45\Www\Lib\GenericHttpError;
-
 class Router
 {
     private $routes = array();
@@ -28,11 +25,6 @@ class Router
     public static function on($regex, $cb_array)
     {
         $params = $_SERVER['REQUEST_URI'];
-
-        if (substr($params, -1) == '/') {
-            $params = rtrim($params, '/');
-        }
-
         $params = (stripos($params, "/") !== 0) ? "/" . $params : $params;
         $regex = str_replace('/', '\/', $regex);
         $is_match = preg_match('/^' . ($regex) . '$/', $params, $matches, PREG_OFFSET_CAPTURE);
@@ -65,27 +57,23 @@ class Router
     }
 
     public function route() {
-        try {
-            foreach ($this->routes as &$value) {             
-                $test = call_user_func(
-                    'Holamanola45\Www\Lib\Router::'.$value["method"], 
-                    $value['path'], 
-                    array(
-                        "class" => $value['controller'], 
-                        "func" => $value['func']
-                    )
-                );
+        foreach ($this->routes as &$value) {
+            $test = call_user_func(
+                'Holamanola45\Www\Lib\Router::'.$value["method"], 
+                $value['path'], 
+                array(
+                    "class" => $value['controller'], 
+                    "func" => $value['func']
+                )
+            );
 
-                if ($test) {
-                    return;
-                }
+            if ($test) {
+                return;
             }
-
-            $res = new Response();
-            GenericHttpError::NotFoundError($res);
-        } catch (Exception $e) {
-            $res = new Response();
-            GenericHttpError::InternalServerError($res, $e->getMessage());
         }
+
+        $res = new Response();
+        $res->status(404);
+        $res->toJSON(json_decode('{"status":"Not Found"}'));
     }
 }

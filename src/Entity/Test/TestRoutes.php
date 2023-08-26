@@ -7,7 +7,6 @@ class TestRoutes {
     public static $prefix = '/api/test';
 
     public static function addRoutes(Router $router) {
-        $router->add(self::$prefix. '', 'get', TestController::class, 'helloWorld');
-        $router->add(self::$prefix. '/lol/([0-9]*)', 'post', TestController::class, 'postTest');
+        $router->add(self::$prefix. '/lol/([0-9]*)', 'post', TestController::class, 'helloWord');
     }
 }
