@@ -2,6 +2,8 @@
 
 class GenericHttpError {
     public static function NotFoundError(Response $res, string $message = NULL) {
+        $res->status(404);
+
         if (!isset($message)) {
             $message = 'Not Found';
         }
@@ -13,6 +15,8 @@ class GenericHttpError {
     }
 
     public static function InternalServerError(Response $res, string $message = NULL) {
+        $res->status(500);
+
         if (!isset($message)) {
             $message = 'Internal Server Error';
         }
@@ -24,6 +28,8 @@ class GenericHttpError {
     }
 
     public static function UnauthorizedError(Response $res, string $message = NULL) {
+        $res->status(401);
+
         if (!isset($message)) {
             $message = 'Unauthorized';
         }
@@ -35,6 +41,8 @@ class GenericHttpError {
     }
 
     public static function ForbiddenError(Response $res, string $message = NULL) {
+        $res->status(403);
+
         if (!isset($message)) {
             $message = 'Forbidden';
         }

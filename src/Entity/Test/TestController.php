@@ -1,11 +1,14 @@
 <?php namespace Holamanola45\Www\Entity\Test;
 
+use Holamanola45\Www\Lib\Db;
 use Holamanola45\Www\Lib\Request;
 use Holamanola45\Www\Lib\Response;
 
 class TestController
 {
     public function helloWorld(Request $req, Response $res) {
+        Db::createConnection();
+        
         $res->status(200);
 
         $res->toXML(array(

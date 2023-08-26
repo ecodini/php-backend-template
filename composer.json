@@ -12,7 +12,8 @@
         }
     ],
     "require": {
-        "monolog/monolog": "^3.4"
+        "monolog/monolog": "^3.4",
+        "vlucas/phpdotenv": "^5.5"
     },
     "scripts": {
         "start-dev": "php -S localhost:8080"
