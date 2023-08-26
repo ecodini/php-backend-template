@@ -1,6 +1,7 @@
-<?php
+<?php namespace Holamanola45\Www\Lib;
 
-namespace Holamanola45\Www\Lib;
+use Holamanola45\Www\Lib\XMLHelper;
+use SimpleXMLElement;
 
 class Response
 {
@@ -17,5 +18,14 @@ class Response
         http_response_code($this->status);
         header('Content-Type: application/json');
         echo json_encode($data);
+    }
+
+    public function toXML($data = []) {
+        http_response_code($this->status);
+        header('Content-Type: application/xml');
+
+        $xml = new SimpleXMLElement('<root/>');
+        XMLHelper::arrayToXML($data, $xml);
+        echo $xml->asXML();
     }
 }
