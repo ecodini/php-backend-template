@@ -27,7 +27,7 @@ class DbConnection {
         $this->close();
     }
 
-    public function query(string $sql, array $vars = []) {
+    public function query(string $sql, array $vars = []): array {
         try {
             $statement = $this->conn->prepare($sql);
 
