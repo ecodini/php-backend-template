@@ -9,7 +9,6 @@ class GenericHttpError {
         }
 
         $res->toXML(array(
-            'status' => 404,
             'message' => $message
         ));
     }
@@ -22,7 +21,6 @@ class GenericHttpError {
         }
 
         $res->toXML(array(
-            'status' => 500,
             'message' => $message
         ));
     }
@@ -35,7 +33,6 @@ class GenericHttpError {
         }
 
         $res->toXML(array(
-            'status' => 401,
             'message' => $message
         ));
     }
@@ -48,7 +45,6 @@ class GenericHttpError {
         }
 
         $res->toXML(array(
-            'status' => 403,
             'message' => $message
         ));
     }

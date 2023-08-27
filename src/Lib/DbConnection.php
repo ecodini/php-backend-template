@@ -33,7 +33,7 @@ class DbConnection {
 
             $statement->execute($vars);
 
-            return $statement->fetchAll();
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (Throwable $e) {
             throw $e;
         }

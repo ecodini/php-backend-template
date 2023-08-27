@@ -29,7 +29,7 @@ abstract class DbService {
     public function findById(int $id) {
         $rows = $this->query('
             SELECT * FROM ' . $this->table_name . '
-            WHERE id = :id;
+            WHERE id = :id LIMIT 1;
         ', array('id' => $id));
 
         if (count($rows) == 0) {
@@ -42,11 +42,8 @@ abstract class DbService {
     public function findAll(int $limit, int $offset) {
         $rows = $this->query('
             SELECT * FROM ' . $this->table_name . '
-            LIMIT :limit OFFSET :offset;
-        ', array(
-            'limit' => $limit,
-            'offset' => $offset
-        ));
+            LIMIT ' . $limit . ' OFFSET ' . $offset . ';
+        ');
 
         return $rows;
     }

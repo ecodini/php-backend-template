@@ -1,18 +1,36 @@
 <?php namespace Holamanola45\Www\Lib;
+      use SimpleXMLElement;
 
 class XMLHelper {
-    public static function arrayToXML($array, &$xml) {
-        foreach($array as $key => $value) {               
-            if(is_array($value)) {            
-                if(!is_numeric($key)){
-                    $subnode = $xml->addChild($key);
-                    self::arrayToXML($value, $subnode);
-                } else {
-                    self::arrayToXML($value, $subnode);
+    public static function arrayToXml(array $array, string $rootElement = null, SimpleXMLElement $xml = null): SimpleXMLElement {
+        $_xml = $xml;
+         
+        if ($_xml === null) {
+            $_xml = new SimpleXMLElement($rootElement !== null ? $rootElement : '<root/>');
+        }
+         
+        foreach ($array as $k => $v) {
+             
+            if (is_array($v)) {
+                $id = NULL;
+
+                if (is_int($k)) {
+                    $id = $k;
+                    $k = 'row';
                 }
+
+                $subnode = $_xml->addChild($k);
+
+                if (isset($id)) {
+                    $subnode->addAttribute('num', $id);
+                }
+
+                self::arrayToXml($v, $k, $subnode);
             } else {
-                $xml->addChild($key, $value);
+                $_xml->addChild($k, $v);
             }
         }
+
+        return $_xml;
     }
 }

@@ -8,17 +8,10 @@ use Throwable;
 class TestController
 {
     public function helloWorld(Request $req, Response $res) {
-        try {
-            /* $conn = new DbConnection();
-
-            $cons = $conn->query('DELETE FROM post WHERE id = :id;', array(
-                'id' => 2
-            ));*/
-            
+        try { 
             $res->status(200);
 
             $res->toXML(array(
-                'status' => 200,
                 'message' => 'Hello world!'
             ));
 
@@ -35,7 +28,6 @@ class TestController
 
         if ($xml->test == 'HOLA') {
             $response = array(
-                'status' => 201,
                 'message' => 'ke onda'
             );
         }

@@ -24,8 +24,9 @@ class Response
         http_response_code($this->status);
         header('Content-Type: application/xml');
 
-        $xml = new SimpleXMLElement('<root/>');
-        XMLHelper::arrayToXML($data, $xml);
+        $data['status'] = $this->status;
+
+        $xml = XMLHelper::arrayToXML($data);
         echo $xml->asXML();
     }
 }
