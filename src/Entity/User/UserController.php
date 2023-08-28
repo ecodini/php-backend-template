@@ -12,6 +12,23 @@ class UserController {
     }
 
     public function getAllUsers(Request $req, Response $res) {
+        /* $allPosts = $this->postService->findAll(array(
+            'limit' => 10,
+            'offset' => 0,
+            'attributes' => array('post.id as post_id'),
+            'join' => array(
+                array(
+                    'required' => true,
+                    'table' => 'user',
+                    'as' => 'u',
+                    'on' => array(
+                        'post.user_id' => 'u.id',
+                        'u.id' => 8
+                    )
+                )
+            )
+        ));*/
+
         $allUsers = $this->userService->findAll(array(
             'limit' => 10,
             'offset' => 0

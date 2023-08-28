@@ -31,10 +31,25 @@ abstract class DbService {
     public function findById(int $id, array $query_params) {
         $attributes = QueryGenerator::parseAttributes($query_params);
 
-        $rows = $this->query('
-            SELECT ' . $attributes .' FROM ' . $this->table_name . '
-            WHERE id = :id LIMIT 1;
-        ', array('id' => $id));
+        $joins = QueryGenerator::generateJoins($query_params, $this->table_name);
+
+        $params = NULL;
+
+        if (isset($joins['values'])) {
+            $params = $joins['values'];
+        }
+
+        if (isset($params)) {
+            $rows = $this->query('
+                SELECT ' . $attributes .' FROM ' . $this->table_name . ' ' . $joins['join_statement'] . '
+                WHERE id = :id LIMIT 1;
+            ', array_merge(array('id' => $id), $joins['values']));
+        } else {
+            $rows = $this->query('
+                SELECT ' . $attributes .' FROM ' . $this->table_name . '
+                WHERE id = :id LIMIT 1;
+            ', array('id' => $id));
+        }
 
         if (count($rows) == 0) {
             return NULL;
@@ -47,17 +62,30 @@ abstract class DbService {
         $attributes = QueryGenerator::parseAttributes($query_params);
 
         $where = QueryGenerator::generateWhere($query_params);
+        $joins = QueryGenerator::generateJoins($query_params, $this->table_name);
 
-        $rows = 'SELECT ' . $attributes .' FROM ' . $this->table_name;
+        $rows = 'SELECT ' . $attributes .' FROM ' . $this->table_name . ' ' . $this->table_name . ' ' . $joins['join_statement'];
 
         $limit_offset = '
             LIMIT ' . $query_params['limit'] . ' OFFSET ' . $query_params['offset'] . ';
         ';
 
-        if (isset($where)) {
-            $rows = $rows . ' ' . $where . ' ';
+        $params = NULL;
 
-            return $this->query($rows . $limit_offset, $query_params['where']);
+        if (isset($joins['values']) && isset($query_params['where'])) {
+            $params = array_merge($joins['values'], $query_params['where']);
+        } else if (isset($joins['values'])) {
+            $params = $joins['values'];
+        } else if (isset($query_params['where'])) {
+            $params = $query_params['where'];
+        }
+
+        if (isset($params)) {
+            if (isset($where)) {
+                $rows = $rows . ' ' . $where . ' ';
+            }
+
+            return $this->query($rows . $limit_offset, $params);
         } else {
             return $this->query($rows . $limit_offset);
         }
@@ -94,5 +122,12 @@ abstract class DbService {
         }
 
         return $rows[0];
+    }
+
+    public function update(array $query_params) {
+        $where = QueryGenerator::generateWhere($query_params);
+        $set = QueryGenerator::generateSet($query_params);
+
+        $this->query('UPDATE ' . $this->table_name . ' ' . $set . ' ' . $where, array_merge($query_params['where'], $query_params['set']));
     }
 }
