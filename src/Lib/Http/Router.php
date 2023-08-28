@@ -1,6 +1,6 @@
 <?php namespace Holamanola45\Www\Lib\Http;
 
-use Exception;
+use Holamanola45\Www\Lib\Auth\SessionManager;
 use Holamanola45\Www\Lib\Error\GenericHttpException;
 use Holamanola45\Www\Lib\Error\InternalServerErrorException;
 use Holamanola45\Www\Lib\Error\NotFoundException;
@@ -41,6 +41,10 @@ class Router
         $is_match = preg_match('/^' . ($regex) . '$/', $params, $matches, PREG_OFFSET_CAPTURE);
 
         if ($is_match) {
+            if ($cb_array['auth']) {
+                SessionManager::verifyLoggedIn();
+            }
+            
             array_shift($matches);
 
             $params = array_map(function ($param) {
@@ -61,28 +65,30 @@ class Router
         return false;
     }
 
-    public function add($path, $method, $controller, $func) {
+    public function add($path, $method, $controller, $func, bool $auth = false) {
         $this->routes[] = array(
             "method" => $method,
             "path" => $path,
             "controller" => $controller,
-            "func" => $func
+            "func" => $func,
+            "auth" => $auth
         );
     }
 
     public function route() {
         try {
             foreach ($this->routes as &$value) {             
-                $test = call_user_func(
+                $matched = call_user_func(
                     'Holamanola45\Www\Lib\Http\Router::'.$value["method"], 
                     $value['path'], 
                     array(
                         "class" => $value['controller'], 
-                        "func" => $value['func']
+                        "func" => $value['func'],
+                        "auth" => $value['auth']
                     )
                 );
 
-                if ($test) {
+                if ($matched) {
                     return;
                 }
             }

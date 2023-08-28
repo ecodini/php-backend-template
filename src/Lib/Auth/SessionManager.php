@@ -1,5 +1,7 @@
 <?php namespace Holamanola45\Www\Lib\Auth;
 
+use Holamanola45\Www\Lib\Error\UnauthorizedException;
+
 class SessionManager {
     public static function load() {
         session_start();
@@ -17,5 +19,11 @@ class SessionManager {
 
     public static function isLoggedIn() {
         return isset($_SESSION['userId']);
+    }
+
+    public static function verifyLoggedIn() {
+        if (!self::isLoggedIn()) {
+            throw new UnauthorizedException('You need to be logged in to access this document.');
+        }
     }
 }
