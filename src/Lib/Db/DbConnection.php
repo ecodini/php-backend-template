@@ -11,13 +11,9 @@ class DbConnection {
     function __construct() {
         $this->dsn = "mysql:host=" . $_ENV["DB_HOST"]. ";dbname=". $_ENV["DB_NAME"]. ";charset=UTF8";
 
-        try {
-            $this->conn = new PDO($this->dsn, $_ENV["DB_USER"], $_ENV["DB_PASS"], array(
-                PDO::ATTR_PERSISTENT =>  true
-            ));
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->conn = new PDO($this->dsn, $_ENV["DB_USER"], $_ENV["DB_PASS"], array(
+            PDO::ATTR_PERSISTENT =>  true
+        ));
     }
 
     public function close() {
@@ -30,15 +26,11 @@ class DbConnection {
     }
 
     public function query(string $sql, array $vars = []): array {
-        try {
-            $statement = $this->conn->prepare($sql);
+        $statement = $this->conn->prepare($sql);
 
-            $statement->execute($vars);
+        $statement->execute($vars);
 
-            return $statement->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function beginTransaction(): bool {
