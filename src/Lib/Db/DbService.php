@@ -20,7 +20,7 @@ abstract class DbService {
         return $this->db_conn->query($sql, $vars);
     }
 
-    public function getTotalRows() {
+    public function getTotalRows(): int {
         $rows = $this->query('
             SELECT COUNT(id) as count FROM ' . $this->table_name . '
         ');

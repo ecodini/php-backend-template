@@ -17,6 +17,7 @@ class UserController {
 
     public function getAllUsers(Request $req, Response $res) {
         $allUsers = $this->userService->findAll(array(
+            'attributes' => array('id', 'username', 'created_at'),
             'limit' => 10,
             'offset' => 0
         ));
@@ -27,6 +28,7 @@ class UserController {
     }
 
     public function getUser(Request $req, Response $res) {
+        // @TODO: ver attributes
         $user = $this->userService->findByUsername($req->params[0]);
 
         return array(
@@ -36,7 +38,7 @@ class UserController {
 
     public function getById(Request $req, Response $res) {
         $user = $this->userService->findById($req->params[0], array(
-            'attributes' => array('id', 'username')
+            'attributes' => array('id', 'username', 'created_at'),
         ));
 
         return array(

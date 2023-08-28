@@ -32,6 +32,12 @@ class Router
     {
         $params = $_SERVER['REQUEST_URI'];
 
+        $question_pos = strpos($params, '?');
+
+        if ($question_pos) {
+            $params = substr($params, 0, $question_pos);
+        }
+
         if (substr($params, -1) == '/') {
             $params = rtrim($params, '/');
         }
@@ -44,6 +50,16 @@ class Router
             if ($cb_array['auth']) {
                 SessionManager::verifyLoggedIn();
             }
+
+            $explode_params = explode('&', $_SERVER['QUERY_STRING']);
+
+            $query_params = array();
+
+            foreach ($explode_params as $val) {
+                $value = explode('=', $val);
+
+                $query_params[$value[0]] = $value[1];
+            }
             
             array_shift($matches);
 
@@ -55,7 +71,7 @@ class Router
 
             $res = new Response();
 
-            $response = $cb(new Request($params), $res);
+            $response = $cb(new Request($params, $query_params), $res);
 
             $res->toXML($response);
 

@@ -1,5 +1,6 @@
 <?php namespace Holamanola45\Www\Entity\User;
-      
+
+use Holamanola45\Www\Domain\User;
 use Holamanola45\Www\Lib\Db\DbConnection;
 use Holamanola45\Www\Lib\Db\DbService;
 

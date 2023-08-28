@@ -15,11 +15,11 @@ class User {
 
     public string $password;
 
-    public DateTime $created_at;
+    public string $created_at;
 
     public string $created_by_ip;
 
     public string $last_login_ip;
 
-    public DateTime $activated_at;
+    public string $activated_at;
 }
