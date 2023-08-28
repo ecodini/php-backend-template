@@ -25,7 +25,21 @@ class Response
 
         $data['status'] = $this->status;
 
+        if (!isset($data['message'])) {
+            if ($this->status < 400) {
+                $data['message'] = 'OK';
+            } else {
+                $data['message'] = 'An error has ocurred while processing your request.';
+            }
+        }
+
         $xml = XMLHelper::arrayToXML($data);
         echo $xml->asXML();
+    }
+
+    public function closeConnection() {
+        session_write_close();
+        ignore_user_abort();
+        fastcgi_finish_request();
     }
 }

@@ -3,6 +3,7 @@ simple php backend template without any framework
 
 ## requirements
 - install [PHP 8.2](https://www.php.net/manual/en/install.php) and [Composer](https://getcomposer.org/doc/00-intro.md)
+- setup [PHP-FPM](https://www.php.net/manual/en/install.fpm.php) on your web server
 
 ## setup
 - run `composer update` in the root directory. this installs all needed dependencies.

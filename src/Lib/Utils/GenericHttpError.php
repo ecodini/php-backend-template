@@ -14,6 +14,18 @@ class GenericHttpError {
         ));
     }
 
+    public static function BadRequestError(Response $res, string $message = NULL) {
+        $res->status(400);
+
+        if (!isset($message)) {
+            $message = 'Bad Request';
+        }
+
+        $res->toXML(array(
+            'message' => $message
+        ));
+    }
+
     public static function InternalServerError(Response $res, string $message = NULL) {
         $res->status(500);
 
