@@ -34,19 +34,17 @@ class UserController {
             'offset' => 0
         ));
 
-        $res->status(200);
-        $res->toXML(array(
+        return array(
             'users' => $allUsers
-        ));
+        );
     }
 
     public function getUser(Request $req, Response $res) {
         $user = $this->userService->findByUsername($req->params[0]);
 
-        $res->status(200);
-        $res->toXML(array(
+        return array(
             'user' => $user
-        ));
+        );
     }
 
     public function getById(Request $req, Response $res) {
@@ -54,9 +52,8 @@ class UserController {
             'attributes' => array('id', 'username')
         ));
 
-        $res->status(200);
-        $res->toXML(array(
+        return array(
             'user' => $user
-        ));
+        );
     }
 }

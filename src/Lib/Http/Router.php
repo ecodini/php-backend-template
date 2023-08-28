@@ -1,7 +1,10 @@
 <?php namespace Holamanola45\Www\Lib\Http;
 
 use Exception;
-use Holamanola45\Www\Lib\Utils\GenericHttpError;
+use Holamanola45\Www\Lib\Error\GenericHttpException;
+use Holamanola45\Www\Lib\Error\InternalServerErrorException;
+use Holamanola45\Www\Lib\Error\NotFoundException;
+use Throwable;
 
 class Router
 {
@@ -46,8 +49,11 @@ class Router
 
             $cb = array(new $cb_array['class'](), $cb_array['func']);
 
-            
-            $cb(new Request($params), new Response());
+            $res = new Response();
+
+            $response = $cb(new Request($params), $res);
+
+            $res->toXML($response);
 
             return true;
         }
@@ -81,11 +87,14 @@ class Router
                 }
             }
 
+            throw new NotFoundException('The URL requested was not found on this server.');
+        } catch (GenericHttpException $e) {
             $res = new Response();
-            GenericHttpError::NotFoundError($res);
-        } catch (Exception $e) {
+            $e->toXML($res);
+        } catch (Throwable $e) {
+            $e = new InternalServerErrorException($e->getMessage());
             $res = new Response();
-            GenericHttpError::InternalServerError($res, $e->getMessage());
+            $e->toXML($res);
         }
     }
 }

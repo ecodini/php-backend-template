@@ -1,6 +1,9 @@
 <?php namespace Holamanola45\Www\Entity\Test;
 
-use Holamanola45\Www\Lib\Utils\GenericHttpError;
+use Exception;
+use Holamanola45\Www\Lib\Error\BadRequestException;
+use Holamanola45\Www\Lib\Error\GenericHttpException;
+use Holamanola45\Www\Lib\Error\InternalServerErrorException;
 use Holamanola45\Www\Lib\Http\Request;
 use Holamanola45\Www\Lib\Http\Response;
 use Throwable;
@@ -8,16 +11,9 @@ use Throwable;
 class TestController
 {
     public function helloWorld(Request $req, Response $res) {
-        try { 
-            $res->status(200);
-
-            $res->toXML(array(
-                'message' => 'Hello world!'
-            ));
-
-        } catch (Throwable $e) {
-            GenericHttpError::InternalServerError($res, $e->getMessage());
-        }
+        return array(
+            'message' => 'Hello world!'
+        );
     }
 
     public function postTest(Request $req, Response $res)
@@ -33,6 +29,6 @@ class TestController
         }
 
         $res->status(201);
-        $res->toXML($response);
+        return $response;
     }
 }

@@ -10,9 +10,8 @@ $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $router = new Router();
+$server = new Server($router);
 
 Routes::addRoutes($router);
 
-$router->route();
-
-Server::run();
+$server->run();
