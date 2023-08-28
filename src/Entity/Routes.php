@@ -2,7 +2,7 @@
 
 use Holamanola45\Www\Entity\Test\TestRoutes;
 use Holamanola45\Www\Entity\User\UserRoutes;
-use Holamanola45\Www\Lib\Router;
+use Holamanola45\Www\Lib\Http\Router;
 
 class Routes {
     public static function addRoutes(Router $router) {

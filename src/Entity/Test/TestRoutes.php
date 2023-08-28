@@ -1,7 +1,7 @@
 <?php namespace Holamanola45\Www\Entity\Test;
 
 use Holamanola45\Www\Entity\Test\TestController;
-use Holamanola45\Www\Lib\Router;
+use Holamanola45\Www\Lib\Http\Router;
 
 class TestRoutes {
     public static $prefix = '/api/test';

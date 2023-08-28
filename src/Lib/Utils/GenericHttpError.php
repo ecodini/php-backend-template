@@ -1,4 +1,5 @@
-<?php namespace Holamanola45\Www\Lib;
+<?php namespace Holamanola45\Www\Lib\Utils;
+      use Holamanola45\Www\Lib\Http\Response;
 
 class GenericHttpError {
     public static function NotFoundError(Response $res, string $message = NULL) {

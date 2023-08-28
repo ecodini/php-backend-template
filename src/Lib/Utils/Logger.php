@@ -1,5 +1,6 @@
-<?php namespace Holamanola45\Www\Lib;
+<?php namespace Holamanola45\Www\Lib\Utils;
 
+use Holamanola45\Www\Lib\Config;
 use Monolog\ErrorHandler;
 use Monolog\Handler\StreamHandler;
 

@@ -1,4 +1,4 @@
-<?php namespace Holamanola45\Www\Lib;
+<?php namespace Holamanola45\Www\Lib\Db;
 
 use PDO;
 use Throwable;

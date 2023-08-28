@@ -1,7 +1,7 @@
-<?php namespace Holamanola45\Www\Lib;
+<?php namespace Holamanola45\Www\Lib\Http;
 
 use Exception;
-use Holamanola45\Www\Lib\GenericHttpError;
+use Holamanola45\Www\Lib\Utils\GenericHttpError;
 
 class Router
 {
@@ -68,7 +68,7 @@ class Router
         try {
             foreach ($this->routes as &$value) {             
                 $test = call_user_func(
-                    'Holamanola45\Www\Lib\Router::'.$value["method"], 
+                    'Holamanola45\Www\Lib\Http\Router::'.$value["method"], 
                     $value['path'], 
                     array(
                         "class" => $value['controller'], 

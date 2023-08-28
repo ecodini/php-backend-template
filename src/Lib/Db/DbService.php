@@ -1,4 +1,4 @@
-<?php namespace Holamanola45\Www\Lib;
+<?php namespace Holamanola45\Www\Lib\Db;
 
 abstract class DbService {
     private DbConnection $db_conn;
@@ -26,9 +26,11 @@ abstract class DbService {
         return $rows[0]['count'];
     }
 
-    public function findById(int $id) {
+    public function findById(int $id, array $query_params) {
+        $attributes = QueryGenerator::parseAttributes($query_params);
+
         $rows = $this->query('
-            SELECT * FROM ' . $this->table_name . '
+            SELECT ' . $attributes .' FROM ' . $this->table_name . '
             WHERE id = :id LIMIT 1;
         ', array('id' => $id));
 
@@ -39,13 +41,24 @@ abstract class DbService {
         return $rows[0];
     }
 
-    public function findAll(int $limit, int $offset) {
-        $rows = $this->query('
-            SELECT * FROM ' . $this->table_name . '
-            LIMIT ' . $limit . ' OFFSET ' . $offset . ';
-        ');
+    public function findAll(array $query_params) {
+        $attributes = QueryGenerator::parseAttributes($query_params);
 
-        return $rows;
+        $where = QueryGenerator::generateWhere($query_params);
+
+        $rows = 'SELECT ' . $attributes .' FROM ' . $this->table_name;
+
+        $limit_offset = '
+            LIMIT ' . $query_params['limit'] . ' OFFSET ' . $query_params['offset'] . ';
+        ';
+
+        if (isset($where)) {
+            $rows = $rows . ' ' . $where . ' ';
+
+            return $this->query($rows . $limit_offset, $query_params['where']);
+        } else {
+            return $this->query($rows . $limit_offset);
+        }
     }
 
     public function deleteById(int $id) {

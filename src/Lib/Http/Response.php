@@ -1,7 +1,6 @@
-<?php namespace Holamanola45\Www\Lib;
+<?php namespace Holamanola45\Www\Lib\Http;
 
-use Holamanola45\Www\Lib\XMLHelper;
-use SimpleXMLElement;
+use Holamanola45\Www\Lib\Utils\XMLHelper;
 
 class Response
 {

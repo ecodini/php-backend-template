@@ -1,8 +1,8 @@
 <?php namespace Holamanola45\Www\Entity\Test;
 
-use Holamanola45\Www\Lib\GenericHttpError;
-use Holamanola45\Www\Lib\Request;
-use Holamanola45\Www\Lib\Response;
+use Holamanola45\Www\Lib\Utils\GenericHttpError;
+use Holamanola45\Www\Lib\Http\Request;
+use Holamanola45\Www\Lib\Http\Response;
 use Throwable;
 
 class TestController

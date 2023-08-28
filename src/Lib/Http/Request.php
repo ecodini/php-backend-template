@@ -1,5 +1,6 @@
-<?php namespace Holamanola45\Www\Lib;
-      use SimpleXMLElement;
+<?php namespace Holamanola45\Www\Lib\Http;
+
+use SimpleXMLElement;
 
 class Request
 {
