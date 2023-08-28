@@ -1,6 +1,9 @@
 <?php namespace Holamanola45\Www\Entity\User;
 
+use Holamanola45\Www\Lib\Auth\PasswordCrypt;
 use Holamanola45\Www\Lib\Auth\SessionManager;
+use Holamanola45\Www\Lib\Error\BadRequestException;
+use Holamanola45\Www\Lib\Error\UnauthorizedException;
 use Holamanola45\Www\Lib\Http\Request;
 use Holamanola45\Www\Lib\Http\Response;
 
@@ -39,5 +42,36 @@ class UserController {
         return array(
             'user' => $user
         );
+    }
+
+    public function login(Request $req, Response $res) {
+        $body = $req->getXML();
+
+        $username = $body->username;
+        $password = $body->password;
+
+        if (!count($username) || !count($password)) {
+            throw new BadRequestException('Username and password are required.');
+        }
+
+        $user = $this->userService->findByUsername($username);
+
+        $passwordValid = PasswordCrypt::verify($password, $user['password']);
+
+        if (!$passwordValid) {
+            throw new UnauthorizedException('The username or password provided are incorrect.');
+        }
+
+        SessionManager::setUser($user['id'], $user['username']);
+
+        return array(
+            'sessionId' => SessionManager::getSessionId()
+        );
+    }
+
+    public function logout(Request $req, Response $res) {
+        SessionManager::destroy();
+
+        return;
     }
 }

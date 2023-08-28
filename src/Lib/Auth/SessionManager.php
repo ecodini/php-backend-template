@@ -26,4 +26,8 @@ class SessionManager {
             throw new UnauthorizedException('You need to be logged in to access this document.');
         }
     }
+
+    public static function getSessionId() {
+        return session_id();
+    }
 }
