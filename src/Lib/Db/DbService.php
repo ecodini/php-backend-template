@@ -131,15 +131,15 @@ abstract class DbService {
         $this->query('UPDATE ' . $this->table_name . ' ' . $set . ' ' . $where, array_merge($query_params['where'], $query_params['set']));
     }
 
-    public function beginTransaction() {
-        $this->db_conn->beginTransaction();
+    public function beginTransaction(): bool {
+        return $this->db_conn->beginTransaction();
     }
 
-    public function commit() {
-        $this->db_conn->commit();
+    public function commit(): bool {
+        return $this->db_conn->commit();
     }
 
-    public function rollback() {
-        $this->db_conn->rollback();
+    public function rollback(): bool {
+        return $this->db_conn->rollback();
     }
 }

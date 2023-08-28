@@ -41,15 +41,15 @@ class DbConnection {
         }
     }
 
-    public function beginTransaction() {
-        $this->conn->beginTransaction();
+    public function beginTransaction(): bool {
+        return $this->conn->beginTransaction();
     }
 
-    public function commit() {
-        $this->conn->commit();
+    public function commit(): bool {
+        return $this->conn->commit();
     }
 
-    public function rollback() {
-        $this->conn->rollBack();
+    public function rollback(): bool {
+        return $this->conn->rollBack();
     }
 }
