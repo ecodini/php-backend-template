@@ -13,7 +13,7 @@ class DbConnection {
 
         try {
             $this->conn = new PDO($this->dsn, $_ENV["DB_USER"], $_ENV["DB_PASS"], array(
-                PDO::ATTR_PERSISTENT
+                PDO::ATTR_PERSISTENT =>  true
             ));
         } catch (Throwable $e) {
             throw $e;
@@ -39,5 +39,17 @@ class DbConnection {
         } catch (Throwable $e) {
             throw $e;
         }
+    }
+
+    public function beginTransaction() {
+        $this->conn->beginTransaction();
+    }
+
+    public function commit() {
+        $this->conn->commit();
+    }
+
+    public function rollback() {
+        $this->conn->rollBack();
     }
 }
