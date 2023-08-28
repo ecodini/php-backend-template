@@ -84,7 +84,7 @@ abstract class DbService {
         if (isset($where)) {
             $rows = $this->query('DELETE FROM ' . $this->table_name . ' ' . $where, $query_params["where"]);
         } else if (!$force) {
-            throw new Exception('Delete from without where detected! Use force flag to force delete. WARNING: This will delete ALL rows!');
+            throw new Exception('Delete from without where clause detected! Use force flag to force delete. WARNING: This will delete ALL rows!');
         } else {
             $rows = $this->query('DELETE FROM ' . $this->table_name);
         }
