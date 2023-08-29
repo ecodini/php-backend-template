@@ -22,4 +22,6 @@ class User {
     public string $last_login_ip;
 
     public string $activated_at;
+
+    public array $extra_properties;
 }

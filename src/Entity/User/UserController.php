@@ -38,7 +38,7 @@ class UserController {
 
     public function getById(Request $req, Response $res) {
         $user = $this->userService->findById($req->params[0], array(
-            'attributes' => array('id', 'username', 'created_at'),
+            'attributes' => array('id', 'username', 'created_at')
         ));
 
         return array(
@@ -58,13 +58,13 @@ class UserController {
 
         $user = $this->userService->findByUsername($username);
 
-        $passwordValid = PasswordCrypt::verify($password, $user['password']);
+        $passwordValid = PasswordCrypt::verify($password, $user->password);
 
         if (!$passwordValid) {
             throw new UnauthorizedException('The username or password provided are incorrect.');
         }
 
-        SessionManager::setUser($user['id'], $user['username']);
+        SessionManager::setUser($user->id, $user->username);
 
         return array(
             'sessionId' => SessionManager::getSessionId()
@@ -75,5 +75,14 @@ class UserController {
         SessionManager::destroy();
 
         return;
+    }
+
+    public function whoami(Request $req, Response $res) {
+        $data = SessionManager::getSessionData();
+
+        return array(
+            'userId' => $data['userId'],
+            'username' => $data['username']
+        );
     }
 }

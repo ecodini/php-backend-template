@@ -17,6 +17,13 @@ class SessionManager {
         $_SESSION['username'] = $username;
     }
 
+    public static function getSessionData() {
+        return array(
+            'userId' => $_SESSION['userId'],
+            'username' => $_SESSION['username']
+        );
+    }
+
     public static function isLoggedIn() {
         return isset($_SESSION['userId']);
     }

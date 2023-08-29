@@ -91,6 +91,15 @@ abstract class DbService {
         }
     }
 
+    public function findOne(array $query_params) {
+        $query_params['limit'] = 1;
+        $query_params['offset'] = 0;
+
+        $res = $this->findAll($query_params);
+
+        return $res[0];
+    }
+
     public function deleteById(int $id) {
         $rows = $this->query('
             DELETE FROM ' . $this->table_name . '

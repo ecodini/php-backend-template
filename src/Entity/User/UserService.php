@@ -11,7 +11,7 @@ class UserService extends DbService {
         parent::__construct('user', $conn);
     }
 
-    public function findByUsername(string $username) {
+    public function findByUsername(string $username): User {
         $row = $this->query('
             SELECT * FROM user
             WHERE username = :name LIMIT 1;
@@ -19,6 +19,6 @@ class UserService extends DbService {
             'name' => $username
         ));
 
-        return $row[0];
+        return new User($row[0]);
     }
 }
