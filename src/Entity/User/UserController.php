@@ -7,6 +7,7 @@ use Holamanola45\Www\Lib\Error\BadRequestException;
 use Holamanola45\Www\Lib\Error\UnauthorizedException;
 use Holamanola45\Www\Lib\Http\Request;
 use Holamanola45\Www\Lib\Http\Response;
+use Holamanola45\Www\Lib\Utils\Timezone;
 
 class UserController {
 
@@ -140,7 +141,7 @@ class UserController {
             $this->userService->createUser(array(
                 'username' => $username,
                 'password' => PasswordCrypt::encrypt($password),
-                'created_at' => date("Y-m-d H:i:s"),
+                'created_at' => Timezone::getCurrentDateString(),
                 'created_by_ip' => $ip
             ));
 
