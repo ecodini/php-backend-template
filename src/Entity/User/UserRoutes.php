@@ -10,6 +10,8 @@ class UserRoutes {
         $router->add(self::$prefix. '/login', 'post', UserController::class, 'login');
         $router->add(self::$prefix. '/logout', 'post', UserController::class, 'logout', true);
         $router->add(self::$prefix. '/whoami', 'get', UserController::class, 'whoami', true);
+        // @TODO: sacarle el pass a este endpoint
+        $router->add(self::$prefix. '/create', 'post', UserController::class, 'createUser', true);
 
         // get users
         $router->add(self::$prefix. '/name/([^/]*$)', 'get', UserController::class, 'getUser', true);

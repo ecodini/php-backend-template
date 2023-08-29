@@ -11,14 +11,21 @@ class UserService extends DbService {
         parent::__construct('user', $conn);
     }
 
-    public function findByUsername(string $username): User {
+    public function findByUsername(string $username, array $attributes): User {
         $row = $this->query('
-            SELECT * FROM user
+            SELECT ' . implode(', ', $attributes) . ' FROM user
             WHERE username = :name LIMIT 1;
         ', array(
             'name' => $username
         ));
 
         return new User($row[0]);
+    }
+
+    public function createUser(array $user_data) {
+        $this->query('
+            INSERT INTO user (username, password, created_at, created_by_ip)
+            VALUES (:username, :password, :created_at, :created_by_ip)
+        ', $user_data);
     }
 }

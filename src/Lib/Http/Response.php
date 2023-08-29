@@ -33,8 +33,6 @@ class Response
             }
         }
 
-        $data = json_decode(json_encode($data), true);
-
         $xml = XMLHelper::arrayToXML($data);
         echo $xml->asXML();
     }

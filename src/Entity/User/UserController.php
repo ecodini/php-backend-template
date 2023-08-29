@@ -1,5 +1,6 @@
 <?php namespace Holamanola45\Www\Entity\User;
 
+use Exception;
 use Holamanola45\Www\Lib\Auth\PasswordCrypt;
 use Holamanola45\Www\Lib\Auth\SessionManager;
 use Holamanola45\Www\Lib\Error\BadRequestException;
@@ -28,8 +29,7 @@ class UserController {
     }
 
     public function getUser(Request $req, Response $res) {
-        // @TODO: ver attributes
-        $user = $this->userService->findByUsername($req->params[0]);
+        $user = $this->userService->findByUsername($req->params[0], ['id', 'username', 'created_at']);
 
         return array(
             'user' => $user
@@ -56,19 +56,41 @@ class UserController {
             throw new BadRequestException('Username and password are required.');
         }
 
-        $user = $this->userService->findByUsername($username);
+        try {
+            $this->userService->beginTransaction();
 
-        $passwordValid = PasswordCrypt::verify($password, $user->password);
+            $user = $this->userService->findByUsername($username, ['id', 'username', 'password']);
 
-        if (!$passwordValid) {
-            throw new UnauthorizedException('The username or password provided are incorrect.');
+            if (!isset($user->id)) {
+                throw new BadRequestException("The user doesn't exist!");
+            }
+
+            $passwordValid = PasswordCrypt::verify($password, $user->password);
+
+            if (!$passwordValid) {
+                throw new UnauthorizedException('The username or password provided are incorrect.');
+            }
+
+            SessionManager::setUser($user->id, $user->username);
+
+            $this->userService->update(array(
+                'set' => array(
+                    'last_login_ip' => $req->getClientIp()
+                ),
+                'where' => array(
+                    'id' => $user->id
+                )
+            ));
+
+            $this->userService->commit();
+
+            return array(
+                'sessionId' => SessionManager::getSessionId()
+            );
+        } catch (Exception $e) {
+            $this->userService->rollback();
+            throw $e;
         }
-
-        SessionManager::setUser($user->id, $user->username);
-
-        return array(
-            'sessionId' => SessionManager::getSessionId()
-        );
     }
 
     public function logout(Request $req, Response $res) {
@@ -84,5 +106,50 @@ class UserController {
             'userId' => $data['userId'],
             'username' => $data['username']
         );
+    }
+
+    public function createUser(Request $req, Response $res) {
+        $body = $req->getXML();
+
+        $username = $body->username;
+        $password = $body->password;
+
+        if (!count($username) || !count($password)) {
+            throw new BadRequestException('Username and password are required.');
+        }
+
+        if (ctype_alnum($username)) {
+            throw new BadRequestException('The username must consist of alphanumeric characters only!');
+        }
+
+        if (strlen($username) > 32) {
+            throw new BadRequestException("The username can't exceed 32 characters in length!");
+        }
+
+        $ip = $req->getClientIp();
+
+        try {
+            $this->userService->beginTransaction();
+
+            $user = $this->userService->findByUsername($username, ['id', 'username']);
+
+            if (isset($user->id)) {
+                throw new BadRequestException('The user already exists!');
+            }
+
+            $this->userService->createUser(array(
+                'username' => $username,
+                'password' => PasswordCrypt::encrypt($password),
+                'created_at' => date("Y-m-d H:i:s"),
+                'created_by_ip' => $ip
+            ));
+
+            $this->userService->commit();
+
+            return;
+        } catch (Exception $e) {
+            $this->userService->rollback();
+            throw $e;
+        }
     }
 }

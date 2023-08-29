@@ -62,4 +62,8 @@ class Request
 
         return new SimpleXMLElement(trim(file_get_contents("php://input")));
     }
+
+    public function getClientIp() {
+        return $_SERVER["HTTP_CF_CONNECTING_IP"];
+    }
 }
