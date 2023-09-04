@@ -28,6 +28,33 @@ class Router
         return self::on($route, $callback);
     }
 
+    public static function patch($route, $callback)
+    {
+        if (strcasecmp($_SERVER['REQUEST_METHOD'], 'PATCH') !== 0) {
+            return;
+        }
+
+        return self::on($route, $callback);
+    }
+
+    public static function put($route, $callback)
+    {
+        if (strcasecmp($_SERVER['REQUEST_METHOD'], 'PUT') !== 0) {
+            return;
+        }
+
+        return self::on($route, $callback);
+    }
+
+    public static function delete($route, $callback)
+    {
+        if (strcasecmp($_SERVER['REQUEST_METHOD'], 'DELETE') !== 0) {
+            return;
+        }
+
+        return self::on($route, $callback);
+    }
+
     public static function on($regex, $cb_array)
     {
         $params = $_SERVER['REQUEST_URI'];
@@ -51,14 +78,14 @@ class Router
                 SessionManager::verifyLoggedIn();
             }
 
-            $explode_params = explode('&', $_SERVER['QUERY_STRING']);
-
             $query_params = array();
 
-            foreach ($explode_params as $val) {
-                $value = explode('=', $val);
+            if (isset($_SERVER['QUERY_STRING'])) {
+                parse_str($_SERVER['QUERY_STRING'], $query_params);
 
-                $query_params[$value[0]] = $value[1];
+                if (isset($query_params['qs'])) {
+                    parse_str($query_params['qs'], $query_params['qs']);
+                }
             }
             
             array_shift($matches);
