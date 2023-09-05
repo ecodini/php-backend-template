@@ -1,3 +1,5 @@
 RewriteEngine On
+RewriteCond %{REQUEST_METHOD} OPTIONS 
+RewriteRule ^(.*)$ blank.html [QSA,L]
 RewriteBase /
 RewriteRule ^(.+)$ index.php [QSA,L]
